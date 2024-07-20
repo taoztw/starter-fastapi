@@ -1,10 +1,10 @@
 # python fastapi 后台项目模板
 ## 相关技术
-fastapi==0.109.0
-sqlalchemy + alembic
-celery redis
-mysql 
-
+fastapi==0.109.0  
+sqlalchemy + alembic  
+celery redis  
+mysql   
+  
 
 ## 目录介绍
 ```markdown
