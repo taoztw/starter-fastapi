@@ -91,8 +91,8 @@ verify_email = """
                 >
                   <div style="text-align: center">
                     <img
-                      src="https://raw.githubusercontent.com/taoztw/demo_code/main/xdoc_icon.png"
-                      alt="X-doc Logo"
+                      src="https://raw.githubusercontent.com/taoztw/demo_code/main/favicon-32x32.png"
+                      alt="Tz-Blog Logo"
                       style="height: 50px"
                     />
                   </div>
@@ -116,7 +116,7 @@ verify_email = """
                     "
                   >
                     Thank you for registering at
-                    <span style="font-size: 16px; font-weight: 800">X-doc</span
+                    <span style="font-size: 16px; font-weight: 800">Tz-Blog</span
                     >. <br />Here is your verification code
 
                     <p
@@ -263,8 +263,8 @@ reset_password_email = """
                 >
                   <div style="text-align: center">
                     <img
-                      src="https://raw.githubusercontent.com/taoztw/demo_code/main/xdoc_icon.png"
-                      alt="X-doc"
+                      src="https://raw.githubusercontent.com/taoztw/demo_code/main/favicon-32x32.png"
+                      alt="Tz-Blog"
                       style="height: 50px"
                     />
                   </div>

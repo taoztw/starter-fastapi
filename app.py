@@ -4,9 +4,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from starlette.middleware.cors import CORSMiddleware
-
 from config import settings
-from db.redis_client import RedisCli
 from exts.exceptions import ApiExceptionHandler
 from fastapi.openapi.docs import get_swagger_ui_html
 from starlette.staticfiles import StaticFiles
@@ -30,11 +28,13 @@ app = FastAPI(
     description="FastAPI Template",
     version="0.0.1",
     debug=True if settings.PROJECT_ENV == "LOCAL" else False,
+    docs_url=f"/{settings.PROJECT_ROOT_NAME}/docs",
+    openapi_url=f"/{settings.PROJECT_ROOT_NAME}/openapi.json",
 )
 
 templates = Jinja2Templates(directory=f"{pathlib.Path.cwd()}/templates/")
 staticfiles = StaticFiles(directory=f"{pathlib.Path.cwd()}/static")
-app.mount("/static", staticfiles, name="static")
+app.mount(f"/{settings.PROJECT_ROOT_NAME}/static", staticfiles, name="static")
 
 
 # 本地静态资源
@@ -44,9 +44,9 @@ async def custom_swagger_ui_html():
         openapi_url=app.openapi_url,
         title=app.title + " - Swagger UI",
         oauth2_redirect_url=app.swagger_ui_oauth2_redirect_url,
-        swagger_js_url="/static/swagger-ui-bundle.js",
-        swagger_css_url="/static/swagger-ui.css",
-        swagger_favicon_url="/static/favicon.png",
+        swagger_js_url=f"/{settings.PROJECT_ROOT_NAME}/static/swagger-ui-bundle.js",
+        swagger_css_url=f"/{settings.PROJECT_ROOT_NAME}/static/swagger-ui.css",
+        swagger_favicon_url=f"/{settings.PROJECT_ROOT_NAME}/static/favicon.png",
     )
 
 
@@ -71,5 +71,5 @@ app.add_middleware(
 
 
 # 路由设置
-app.include_router(api_router, prefix="/starter/api/v1")
+app.include_router(api_router, prefix=f"/{settings.PROJECT_ROOT_NAME}/api/v1")
 

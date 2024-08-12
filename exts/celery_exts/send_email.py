@@ -20,7 +20,7 @@ async def send_email_async(email):
     logger.info(f"email verify code: {code}, email: {email}")
     await redis_client.set(f"email_verify:{email}", code, ex=timedelta(minutes=5))
     await EmailHelper.main_async(
-        to_address=email, html_body=html_body, subject="[X-doc] Email Verification"
+        to_address=email, html_body=html_body, subject="Email Verification"
     )
 
 
@@ -28,7 +28,7 @@ async def send_email_reset_password(email, reset_link):
     html_body = reset_password_email.format(href=reset_link)
     logger.info(f"email reset password: {email}, reset_link: {reset_link}")
     await EmailHelper.main_async(
-        to_address=email, html_body=html_body, subject="[X-doc] Reset Your Password"
+        to_address=email, html_body=html_body, subject="Reset Your Password"
     )
 
 

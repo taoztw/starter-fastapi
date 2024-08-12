@@ -13,8 +13,9 @@ class Settings(BaseSettings):
     # 项目相关配置
     PROJECT_NAME: str = env_config.get("PROJECT_NAME", "FastAPI Template")
     PROJECT_ENV: str = env_config.get("PROJECT_ENV", "LOCAL")
-    DEBUG: bool = False
+    DEBUG: bool = env_config.get("DEBUG", True)
     PROJECT_PORT: int = env_config.get("PROJECT_PORT", 5571)
+    PROJECT_ROOT_NAME: str = env_config.get("PROJECT_ROOT_NAME", "test")
 
     # 定义连接异步引擎数据库的URL地址
     ASYNC_DB_DRIVER: str = "mysql+aiomysql"
