@@ -1,5 +1,6 @@
 from typing import Any, Dict, Optional
 from fastapi.responses import JSONResponse
+from fastapi import HTTPException
 import time
 import json
 import datetime
@@ -87,8 +88,6 @@ class MethodnotallowedException(ApiResponse):
     message = "不允许使用此方法提交访问"
 
 
-
-
 class OtherException(ApiResponse):
     http_status_code = 800
     result = {}
@@ -132,7 +131,6 @@ class FileExtensionException(ApiResponse):
 
 class Success(ApiResponse):
     http_status_code = 200
-    result = None  # 结果可以是{} 或 []
     message = "获取成功"
 
 

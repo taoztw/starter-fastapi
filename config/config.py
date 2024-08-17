@@ -42,6 +42,9 @@ class Settings(BaseSettings):
     BASE_DIR: str = os.path.dirname(os.path.dirname(__file__))
     LOG_DIR: str = os.path.join(BASE_DIR, "logs")
 
+    # Sqlite 配置
+    # sqllite数据库地址
+    SQLITE_URL: str = f"sqlite+aiosqlite:///{BASE_DIR}/{PROJECT_ROOT_NAME}.db"
     # redis配置
     REDIS_HOST: str = os.environ.get("REDIS_HOST", "localhost")
     REDIS_PASSWORD: str = os.environ.get("REDIS_PASSWORD", "")
@@ -62,8 +65,10 @@ class Settings(BaseSettings):
 
     # EMAIL
     EMAIL_SENDER: str = ""
-    ALIBABA_CLOUD_ACCESS_KEY_ID:str = env_config.get("ALIBABA_CLOUD_ACCESS_KEY_ID", "")
-    ALIBABA_CLOUD_ACCESS_KEY_SECRET: str = env_config.get("ALIBABA_CLOUD_ACCESS_KEY_SECRET", "")
+    ALIBABA_CLOUD_ACCESS_KEY_ID: str = env_config.get("ALIBABA_CLOUD_ACCESS_KEY_ID", "")
+    ALIBABA_CLOUD_ACCESS_KEY_SECRET: str = env_config.get(
+        "ALIBABA_CLOUD_ACCESS_KEY_SECRET", ""
+    )
 
 
 class LocalTzSetting(Settings):

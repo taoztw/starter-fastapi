@@ -7,9 +7,11 @@ from exts.responses.json_response import (
     NotfoundException,
     LimiterResException,
     BadRequestException,
-    ParameterException, UnauthorizedException,
+    ParameterException,
+    UnauthorizedException,
 )
 from exts import logger
+
 
 class ApiExceptionHandler:
     def __init__(self, app=None, *args, **kwargs):
@@ -34,7 +36,6 @@ class ApiExceptionHandler:
             message="参数校验错误",
             result={"detail": exc.errors(), "body": exc.body},
         )
-
 
     async def all_exception_handler(self, request: Request, exc: Exception):
         logger.debug(f"all_exception_handler: {exc}")

@@ -1,9 +1,12 @@
 # python fastapi 后台项目模板
 ## 相关技术
+> blog地址: 
+
 fastapi==0.109.0  
-sqlalchemy + alembic  
+~~sqlalchemy + alembic~~  
+sqlmodel
 celery redis  
-mysql   
+mysql & sqlite(default)
   
 
 ## 目录介绍
@@ -17,7 +20,8 @@ mysql
 ├── apis
 │         ├── __init__.py
 │         ├── system.py 
-│         └── user
+│         ├── user.py 
+│         └── heros
 │             ├── __init__.py
 │             ├── api.py   # 视图函数路径
 │             ├── schemas.py
@@ -79,13 +83,10 @@ mysql
 │         ├── favicon.png
 │         ├── swagger-ui-bundle.js
 │         └── swagger-ui.css
-├── tests
+├── tests  
 │         ├── __init__.py
 │         ├── conftest.py
-│         ├── test_connect.py
-│         ├── test_env.py
-│         └── utils
-│             └── __init__.py
+│         └── test_heros.py
 └── utils
     ├── __init__.py
     ├── auth_helper.py
@@ -98,11 +99,17 @@ mysql
 
 
 ## 项目启动
-1. 通过`.env.example`创建`.env`文件, 配置mysql redis密码
+1. 通过`.env.example`创建`.env`文件, 配置mysql redis密码等项目信息
 2. 修改`alembic.ini`中的数据库url
 3. 迁移数据库 `alembic revision --autogenerate -m "first"`  `alembic upgrade head`
 4. 依赖包安装 `pip install -r requirements.txt`
 5. 启动项目 `sh deploy.sh`
+
+## Change log  
+- `2024-08-18`:  
+  - 1. 采用sqlmodel重构user api功能，增加sqlmodel官网文档示例
+  - 2. 新增pytest测试用例
+  - 3. 采用sqlite
 
 
 ## TODO

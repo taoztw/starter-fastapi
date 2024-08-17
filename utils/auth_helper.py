@@ -5,8 +5,8 @@ from jose import JWTError, jwt
 from pydantic import BaseModel, ValidationError
 from jose import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 
-from apis.user.service import UserServices
 from config import settings
 from datetime import datetime
 from fastapi import Depends
@@ -15,6 +15,7 @@ from passlib.context import CryptContext
 from exts import logger
 
 from dependencies import get_db_context
+from models import User
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 error = HTTPException(status_code=401, detail="invalid authorization credentials")
@@ -45,14 +46,19 @@ async def authorize(
         if payload["mode"] != "refresh_token":
             raise error
         # 检查是否用户存在
-        user = await UserServices.get_user_by_email(db_session, payload["email"])
+        result = await db_session.execute(
+            select(User).where(User.email == payload["email"])
+        )
+        user = result.scalars().first()
         if not user or token != user.refresh_token:
             raise error
 
         # 生成新的refresh token并且更新用户
         data = {"email": user.email, "id": user.id}
         refresh_token = create_refresh_token(data)
-        await UserServices.update_refresh_token(db_session, user.email, refresh_token)
+        user.sqlmodel_update({"refresh_token": refresh_token})
+        db_session.add(user)
+        await db_session.commit()
         access_tkn = create_access_token(data)
         return {
             "access_token": access_tkn,
@@ -62,6 +68,3 @@ async def authorize(
         }
     except JWTError:
         raise error
-
-
-

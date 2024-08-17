@@ -6,7 +6,10 @@ from contextlib import asynccontextmanager
 from starlette.middleware.cors import CORSMiddleware
 from config import settings
 from exts.exceptions import ApiExceptionHandler
-from fastapi.openapi.docs import get_swagger_ui_html
+from fastapi.openapi.docs import (
+    get_swagger_ui_html,
+    get_swagger_ui_oauth2_redirect_html,
+)
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from exts.requestvar import BindContextvarMiddleware
@@ -28,7 +31,8 @@ app = FastAPI(
     description="FastAPI Template",
     version="0.0.1",
     debug=True if settings.PROJECT_ENV == "LOCAL" else False,
-    docs_url=f"/{settings.PROJECT_ROOT_NAME}/docs",
+    docs_url=None,
+    redoc_url=None,
     openapi_url=f"/{settings.PROJECT_ROOT_NAME}/openapi.json",
 )
 
@@ -38,7 +42,7 @@ app.mount(f"/{settings.PROJECT_ROOT_NAME}/static", staticfiles, name="static")
 
 
 # 本地静态资源
-@app.get("/docs", include_in_schema=False)
+@app.get(f"/{settings.PROJECT_ROOT_NAME}/docs", include_in_schema=False)
 async def custom_swagger_ui_html():
     return get_swagger_ui_html(
         openapi_url=app.openapi_url,
@@ -50,7 +54,12 @@ async def custom_swagger_ui_html():
     )
 
 
-# 注册全局异常
+@app.get(app.swagger_ui_oauth2_redirect_url, include_in_schema=False)
+async def swagger_ui_redirect():
+    print(123)
+    return get_swagger_ui_oauth2_redirect_html()
+
+
 ApiExceptionHandler().init_app(app)
 app.add_middleware(BindContextvarMiddleware)
 app.add_middleware(RequestLoggerMiddleware)
@@ -72,4 +81,3 @@ app.add_middleware(
 
 # 路由设置
 app.include_router(api_router, prefix=f"/{settings.PROJECT_ROOT_NAME}/api/v1")
-
