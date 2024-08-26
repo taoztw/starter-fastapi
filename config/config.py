@@ -41,6 +41,10 @@ class Settings(BaseSettings):
 
     BASE_DIR: str = os.path.dirname(os.path.dirname(__file__))
     LOG_DIR: str = os.path.join(BASE_DIR, "logs")
+    CABIN_STATIC_DIR: str = os.path.join(BASE_DIR, "static/cabin_static")
+
+    if os.path.exists(CABIN_STATIC_DIR) is False:
+        os.makedirs(CABIN_STATIC_DIR)
 
     # Sqlite 配置
     # sqllite数据库地址

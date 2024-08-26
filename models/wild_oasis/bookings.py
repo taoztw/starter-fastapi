@@ -40,3 +40,31 @@ class Bookings(BookingsBase, table=True):
     #         "onupdate": lambda: datetime.now(timezone.utc),
     #     },
     # )
+
+
+class BookingsCreate(BookingsBase):
+    cabinId: str
+    guestId: str
+
+
+class BookingsRead(BookingsBase):
+    id: str
+    cabinId: str
+    guestId: str
+    created_at: datetime
+
+
+class BookingsUpdate(SQLModel):
+    startDate: datetime | None = None
+    endDate: datetime | None = None
+    numNights: int | None = None
+    numGuests: int | None = None
+    cabinPrice: float | None = None
+    extrasPrice: float | None = None
+    totalPrice: float | None = None
+    status: str | None = None
+    hasBreakfast: bool | None = None
+    isPaid: bool | None = None
+    description: str | None = None
+    cabinId: str | None = None
+    guestId: str | None = None

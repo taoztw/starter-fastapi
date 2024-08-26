@@ -22,3 +22,20 @@ class Guests(GuestsBase, table=True):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
 
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+
+
+class GuestsCreate(GuestsBase):
+    pass
+
+
+class GuestsRead(GuestsBase):
+    id: str
+    created_at: datetime
+
+
+class GuestsUpdate(GuestsBase):
+    fullName: str | None = None
+    email: str | None = None
+    nationalID: str | None = None
+    nationality: str | None = None
+    countryFlag: str | None = None

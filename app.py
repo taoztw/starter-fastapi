@@ -70,6 +70,7 @@ app.add_middleware(
         "http://10.1.6.35:3000",
         "http://localhost",
         "http://localhost:3000",
+        "http://localhost:5173",
     ],
     allow_credentials=True,
     allow_methods=["*"],
