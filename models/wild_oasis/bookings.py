@@ -1,7 +1,9 @@
-from sqlmodel import SQLModel, Field
+from typing import Optional
+from sqlmodel import SQLModel, Field, Relationship
 from datetime import datetime, timezone
 import uuid
 from sqlalchemy import Column, TIMESTAMP, String
+
 
 TABLE_PREFIX = "wild_oasis_"
 
@@ -32,26 +34,14 @@ class Bookings(BookingsBase, table=True):
     cabinId: str | None = Field(default=None, foreign_key=f"{TABLE_PREFIX}cabins.id")
     guestId: str | None = Field(default=None, foreign_key=f"{TABLE_PREFIX}guests.id")
 
+    cabin: Optional["Cabins"] = Relationship(back_populates="bookings")
+    guest: Optional["Guests"] = Relationship(back_populates="bookings")
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
-    # updated_at: datetime | None = Field(
-    #     default_factory=lambda: datetime.now(timezone.utc),
-    #     nullable=False,
-    #     sa_column_kwargs={
-    #         "onupdate": lambda: datetime.now(timezone.utc),
-    #     },
-    # )
 
 
 class BookingsCreate(BookingsBase):
     cabinId: str
     guestId: str
-
-
-class BookingsRead(BookingsBase):
-    id: str
-    cabinId: str
-    guestId: str
-    created_at: datetime
 
 
 class BookingsUpdate(SQLModel):

@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import List
 
 from sqlalchemy import Column, TIMESTAMP
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Relationship
 import uuid
 
 TABLE_PREFIX = "wild_oasis_"
@@ -22,6 +23,7 @@ class Guests(GuestsBase, table=True):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
 
     created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+    bookings: List["Bookings"] = Relationship(back_populates="guest")
 
 
 class GuestsCreate(GuestsBase):

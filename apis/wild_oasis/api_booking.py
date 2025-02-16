@@ -1,5 +1,6 @@
 # routes/bookings.py
 from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.orm import joinedload
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from datetime import datetime
@@ -7,9 +8,10 @@ from dependencies import get_db_context
 from models.wild_oasis.bookings import (
     Bookings,
     BookingsCreate,
-    BookingsRead,
     BookingsUpdate,
 )
+
+from .schemas import BookingsRead
 
 router = APIRouter()
 
@@ -33,7 +35,12 @@ async def read_bookings(
     limit: int = Query(default=10, le=100),
     db_session: AsyncSession = Depends(get_db_context),
 ):
-    bookings = await db_session.execute(select(Bookings).offset(offset).limit(limit))
+    bookings = await db_session.execute(
+        select(Bookings)
+        .options(joinedload(Bookings.cabin), joinedload(Bookings.guest))
+        .offset(offset)
+        .limit(limit)
+    )
     bookings = bookings.scalars().all()
     return bookings
 
