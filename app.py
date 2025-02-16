@@ -1,5 +1,4 @@
 import pathlib
-import os
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
@@ -14,23 +13,20 @@ from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from exts.requestvar import BindContextvarMiddleware
 from middlewares.request_logger import RequestLoggerMiddleware
-from db.redis_client import RedisClient
 from router import api_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await RedisClient.init_redis_connect()
+    # await RedisClient.init_redis_connect()
     yield
-    await RedisClient.close_redis_connect()
+    # await RedisClient.close_redis_connect()
 
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     lifespan=lifespan,
-    description="FastAPI Template",
-    version="0.0.1",
-    debug=True if settings.PROJECT_ENV == "LOCAL" else False,
+    debug=settings.DEBUG,
     docs_url=None,
     redoc_url=None,
     openapi_url=f"/{settings.PROJECT_ROOT_NAME}/openapi.json",
@@ -56,7 +52,6 @@ async def custom_swagger_ui_html():
 
 @app.get(app.swagger_ui_oauth2_redirect_url, include_in_schema=False)
 async def swagger_ui_redirect():
-    print(123)
     return get_swagger_ui_oauth2_redirect_html()
 
 
@@ -65,13 +60,7 @@ app.add_middleware(BindContextvarMiddleware)
 app.add_middleware(RequestLoggerMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://10.1.6.35",
-        "http://10.1.6.35:3000",
-        "http://localhost",
-        "http://localhost:3000",
-        "http://localhost:5173",
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
